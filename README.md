@@ -1,88 +1,109 @@
-Proof of Waste Value (PoWV) – Waste Tracking & Tokenization Protocol
+# POWV Protocol — Proof of Weighted Value
 
-PoWV is a next-generation protocol for traceability, verification and tokenization of waste streams using blockchain, IoT data and cryptographic proofs.
-This repository contains the PoWV Web App, a lightweight interface for registering batches, validating materials and interacting with PoWV tokens (PoWVT – RWA & PoWVX – Utility).
+### Enterprise Infrastructure for Waste Traceability, Verification and Tokenization
 
-What is PoWV?
+PoWV (Proof of Weighted Value) is a next-generation protocol designed to bridge physical waste operations with verifiable digital value through cryptographic proofs, IoT telemetry and blockchain infrastructure.
 
-PoWV (Proof of Waste Value) is a protocol that links physical waste operations to digital value, enabling:
+This repository contains the PoWV Web Application, an enterprise-grade interface for batch registration, material verification and tokenized interaction across the PoWV ecosystem.
 
-Verifiable waste tracking
+The protocol enables secure tracking, validation and monetization of waste streams by transforming real-world evidence into cryptographically auditable records.
 
-IoT-based measurement (MRV)
+---
 
-Fraud-resistant batch validation
+## What is PoWV?
 
-Real-world asset (RWA) tokenization
+PoWV is a cryptographic trust layer for waste management, recycling and circular economy infrastructures.
 
-Dual-token model (RWA + Utility)
+It connects physical waste lifecycle events to digital settlement layers, enabling:
 
-Transparent lifecycle records on-chain
+* Verifiable waste traceability
+* IoT-based measurement and MRV workflows
+* Fraud-resistant batch validation
+* Real World Asset (RWA) tokenization
+* Utility token interactions
+* Immutable on-chain lifecycle records
 
-It acts as a cryptographic trust layer for recycling cooperatives, industries, environmental projects and Web3 infrastructures.
+Unlike traditional systems that rely heavily on manual reporting and centralized trust, PoWV introduces a protocol-based approach to integrity and verification.
 
-Features
+The protocol is designed for:
 
-Batch Registration (images, metadata, GPS, weight, classification)
+* Recycling cooperatives
+* Waste processors
+* Industrial operators
+* Environmental projects
+* Web3 infrastructure
 
-Automatic Verification via MRV engine
+---
 
-Oracles Layer for decentralized validation
+## Core Features
 
-Tokenization Dashboard
+* Batch registration (images, metadata, GPS, weight and classification)
+* Automated verification through MRV engine
+* Decentralized oracle validation layer
+* Tokenization dashboard
+* Wallet, transfer and staking tools
+* Adaptive dark/light interface
 
-Transfer, Staking & Wallet Tools
+---
 
-Dark/Light UI Mode
+## Technology Stack
 
-Tech Stack
+* TypeScript
+* React
+* Vite
+* TailwindCSS
+* EVM-compatible blockchain
+* Solidity smart contracts
+* IPFS storage
+* Cryptographic proof systems
+* Optional IoT integration layer
 
-TypeScript / React
+---
 
-Vite
+## Project Structure
 
-TailwindCSS / CSS Tokens
-
-EVM-compatible blockchain
-
-PoWV Smart Contracts (Solidity)
-
-IPFS / Hashing / Proof-of-Integrity
-
-IoT Integration Layer (optional)
-
-project Structure
-proof-of-waste-value/
+```text
+powv-protocol/
 │
 ├── components/      # UI components
-├── services/        # API, blockchain & utilities
-├── metadata.json    # Manifest + metadata
+├── services/        # API, blockchain and utilities
+├── metadata.json    # Manifest and metadata
 ├── App.tsx          # Main application
 ├── index.tsx        # Entry point
 ├── index.html
 └── README.md
+```
 
-Running Locally
-npm install
-npm run dev
+---
 
+## Security Contact
 
-Access: http://localhost:5173
-
-Build
-npm run build
-
-License
-
-## Contact
-
-Security reports should be sent to the official PoWV Protocol security contact:
+Security reports should be sent to:
 
 powv.protocol@proton.me
 
-A dedicated security domain email may be introduced in future infrastructure upgrades.
+A dedicated enterprise security domain may be introduced in future infrastructure upgrades.
 
-Author
+---
 
-Gabriel de Almeida
-Multidisciplinary developer working with blockchain, applied AI and high-integrity data systems.
+## Author
+
+### Gabriel de Almeida Santos Silva
+
+Founder & Chief Architect — PoWV Protocol
+
+Fields of expertise:
+
+* Protocol Architecture
+* Blockchain Engineering
+* Applied AI
+* Cryptographic Systems
+* High-Integrity Infrastructure
+
+---
+
+## Notice
+
+PoWV Protocol, including its architecture, methodology, cryptographic mechanisms and economic models, may be protected under applicable intellectual property laws.
+
+All rights reserved.
