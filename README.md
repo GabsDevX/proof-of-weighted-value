@@ -80,7 +80,7 @@ powv-protocol/
 
 Security reports should be sent to:
 
-powv.protocol@proton.me
+gabriel@powvprotocol.org
 
 A dedicated enterprise security domain may be introduced in future infrastructure upgrades.
 
