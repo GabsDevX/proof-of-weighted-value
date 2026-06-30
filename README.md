@@ -1,109 +1,86 @@
 # POWV Protocol — Proof of Weighted Value
 
-### Enterprise Infrastructure for Waste Traceability, Verification and Tokenization
+**Enterprise Infrastructure for Cyber-Physical Systems and Real-World Asset (RWA) Tokenization**
 
-PoWV (Proof of Weighted Value) is a next-generation protocol designed to bridge physical waste operations with verifiable digital value through cryptographic proofs, IoT telemetry and blockchain infrastructure.
+The PoWV (Proof of Weighted Value) protocol is a next-generation decentralized architecture engineered to bridge physical operations with digital ledgers through cryptographic proofs, IoT telemetry, and secure blockchain infrastructure.
 
-This repository contains the PoWV Web Application, an enterprise-grade interface for batch registration, material verification and tokenized interaction across the PoWV ecosystem.
+This repository contains the **PoWV Web Application**, an enterprise-grade interface for hardware endpoint registration, mathematical weight verification, and tokenized asset interaction across the PoWV ecosystem.
 
-The protocol enables secure tracking, validation and monetization of waste streams by transforming real-world evidence into cryptographically auditable records.
+The protocol enables secure tracking, validation, and monetization of physical asset streams by transforming real-world telemetry into cryptographically auditable on-chain records.
 
 ---
 
 ## What is PoWV?
 
-PoWV is a cryptographic trust layer for waste management, recycling and circular economy infrastructures.
+PoWV operates as a trust-minimized layer for industrial automation, logistics, and high-integrity hardware systems. It connects physical-edge events directly to distributed settlement layers, enabling:
 
-It connects physical waste lifecycle events to digital settlement layers, enabling:
-
-* Verifiable waste traceability
-* IoT-based measurement and MRV workflows
-* Fraud-resistant batch validation
-* Real World Asset (RWA) tokenization
-* Utility token interactions
-* Immutable on-chain lifecycle records
-
-Unlike traditional systems that rely heavily on manual reporting and centralized trust, PoWV introduces a protocol-based approach to integrity and verification.
-
-The protocol is designed for:
-
-* Recycling cooperatives
-* Waste processors
-* Industrial operators
-* Environmental projects
-* Web3 infrastructure
+* Verifiable data and physical asset traceability
+* IoT-based telemetry measurement and MRV (Measurement, Reporting, and Verification) workflows
+* Fraud-resistant hardware batch validation
+* Real-World Asset (RWA) tokenization and anchoring
+* Automated smart contract utility and token interactions
+* Immutable auditing for end-to-end infrastructure lifecycles
 
 ---
 
-## Core Features
+## Core Features (Web Interface)
 
-* Batch registration (images, metadata, GPS, weight and classification)
-* Automated verification through MRV engine
-* Decentralized oracle validation layer
-* Tokenization dashboard
-* Wallet, transfer and staking tools
-* Adaptive dark/light interface
+* **Batch Registration:** Visual interface for managing images, hardware metadata, GPS telemetry, weight data, and asset classification.
+* **Automated Verification:** Seamless interaction with the core PoWV engine.
+* **Decentralized Oracle Layer:** Real-time data validation dashboards.
+* **Tokenization Workspace:** Client-side wallet integration, transfer modules, and asset staking tools.
+* **Enterprise UI:** Adaptive dark/light interface built for mission-critical operations.
 
 ---
 
 ## Technology Stack
 
-* TypeScript
-* React
-* Vite
-* TailwindCSS
-* EVM-compatible blockchain
-* Solidity smart contracts
-* IPFS storage
-* Cryptographic proof systems
-* Optional IoT integration layer
+* **Language:** TypeScript
+* **Frontend Framework:** React (powered by Vite)
+* **Styling:** TailwindCSS
+* **Blockchain Layer:** EVM-compatible networks & Solidity smart contracts
+* **Decentralized Storage:** IPFS integration for immutable metadata
+* **Security:** Cryptographic proof systems & Edge hardware integration layers
 
 ---
 
 ## Project Structure
 
 ```text
-powv-protocol/
-│
-├── components/      # UI components
-├── services/        # API, blockchain and utilities
-├── metadata.json    # Manifest and metadata
-├── App.tsx          # Main application
-├── index.tsx        # Entry point
-├── index.html
-└── README.md
-```
+your-project/
+├── components/       # UI Components & Dashboard layout
+├── services/         # Web3, Blockchain, and IoT utility APIs
+├── metadata.json     # Mock/Test asset metadata structures
+├── App.tsx           # Main application entry and routing
+├── index.tsx         # React DOM lifecycle entry point
+├── index.html        # HTML5 entry shell
+└── README.md         # Documentation
 
----
+Security Contact
 
-## Security Contact
-
-Security reports should be sent to:
+Security reports and architectural inquiries should be sent to:
 
 gabriel@powvprotocol.org
 
-A dedicated enterprise security domain may be introduced in future infrastructure upgrades.
+A dedicated enterprise security domain and repository are established under our institutional organization.
 
----
+Author
 
-## Author
-
-### Gabriel de Almeida Santos Silva
+Gabriel de Almeida Santos Silva
 
 Founder & Chief Architect — PoWV Protocol
 
-Fields of expertise:
+Fields of Expertise:
 
-* Protocol Architecture
-* Blockchain Engineering
-* Applied AI
-* Cryptographic Systems
-* High-Integrity Infrastructure
+Protocol Architecture & Blockchain Engineering
 
----
+Applied AI & Data-Driven Automation
 
-## Notice
+Cryptographic Systems & Hardware Integration
 
-PoWV Protocol, including its architecture, methodology, cryptographic mechanisms and economic models, may be protected under applicable intellectual property laws.
+High-Integrity Industrial Infrastructure
 
-All rights reserved.
+Notice
+The PoWV Protocol, including its architecture, methodology, cryptographic mechanisms, and economic models, may be protected under applicable intellectual property laws.
+
+Copyright © 2026 Gabriel de Almeida Santos Silva. All rights reserved.
