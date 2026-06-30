@@ -81,6 +81,7 @@ Cryptographic Systems & Hardware Integration
 High-Integrity Industrial Infrastructure
 
 Notice
-The PoWV Protocol, including its architecture, methodology, cryptographic mechanisms, and economic models, may be protected under applicable intellectual property laws.
+The PoWV Protocol, including its architecture, methodology, cryptographic mechanisms, and economic models,
+may be protected under applicable intellectual property laws.
 
 Copyright © 2026 Gabriel de Almeida Santos Silva. All rights reserved.
