@@ -7,10 +7,7 @@ import { loadLabSnapshot } from './services/labService';
 import type { LabSnapshot } from './types';
 
 function shortTimestamp(value: string): string {
-  return new Intl.DateTimeFormat('en', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(value));
+  return new Date(value).toISOString();
 }
 
 function App() {
@@ -110,7 +107,11 @@ function App() {
               <p className="eyebrow">Runtime observability</p>
               <h2>Service status</h2>
             </div>
-            {snapshot && <span className="updated-at">Observed {shortTimestamp(snapshot.generatedAt)}</span>}
+            {snapshot && (
+              <time className="updated-at" dateTime={snapshot.generatedAt}>
+                Observed {shortTimestamp(snapshot.generatedAt)}
+              </time>
+            )}
           </div>
 
           <div className="service-grid">
@@ -206,4 +207,3 @@ function App() {
 }
 
 export default App;
-
