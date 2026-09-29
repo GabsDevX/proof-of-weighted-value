@@ -69,6 +69,19 @@ The Urano integration is host-mediated. The computer reads the serial response a
 | HTTP 2xx from ESP32 | Endpoint received and accepted the request | Cryptographic acceptance or persistence |
 | Provisioned location | Installation metadata supplied by configuration | Live or independently attested GNSS position |
 
+## 5.1 Verification-control identifiers
+
+| Control ID | Verification objective | Current authority | Public evidence |
+| --- | --- | --- | --- |
+| `ACQ-01` | Preserve the measurement returned by the instrument interface. | Host bridge | Sanitized event schema only |
+| `ENC-01` | Produce one canonical unsigned byte sequence. | PoWV-SBD encoder | Packet-profile description |
+| `SIG-01` | Verify ECDSA P-256 over the exact received unsigned bytes. | Edge gateway | Laboratory-validated capability status |
+| `RPL-01` | Reject committed or concurrently reserved event identifiers. | Edge gateway | Retry-safe replay-control status |
+| `AUD-01` | Append accepted identifiers and calculate the resulting Merkle root. | Audit service | Read-only audit summary when configured |
+| `PUB-01` | Prevent the public client from acquiring signing or administrative authority. | Deployment boundary | Source inspection and security policy |
+
+Control identifiers are stable review references, not certification claims. A control is considered externally demonstrated only when the referenced revision and its reproducible evidence are supplied together.
+
 ## 6. Runtime profiles
 
 | Profile | Entry condition | Data source |
@@ -109,4 +122,3 @@ All `VITE_*` configuration values are client-visible and must be treated as publ
 3. Introduce durable audit persistence and restart-recovery tests.
 4. Specify MQTT/TLS and RS-485 transport profiles, including replay and failure semantics.
 5. Define an independently verifiable anchor receipt before making external-ledger claims.
-
