@@ -1,48 +1,60 @@
+export type RuntimeMode = 'demo' | 'connected' | 'partial';
 
-export enum AppSection {
-  SUBMIT = 'Submit Batch',
-  CLAIM = 'Claim Tokens',
-  RETIRE = 'Retire Tokens',
+export type ServiceState = 'online' | 'degraded' | 'offline' | 'simulated';
+
+export interface ServiceHealth {
+  id: string;
+  label: string;
+  description: string;
+  state: ServiceState;
+  detail: string;
 }
 
-export interface OracleReport {
-  feVersion: string;
-  anchorBlock: string;
-  signature: string;
+export interface PhysicalEvent {
+  event_type: 'weight_measurement';
+  timestamp: string;
+  device: {
+    scale: string;
+    interface: string;
+    identity: string;
+  };
+  measurement: {
+    weight_kg: number;
+    tare_kg: number;
+  };
+  location: {
+    label: string;
+    disclosure: string;
+    source: string;
+  };
+  source: 'physical_scale' | 'demo_fixture';
+  integrity: {
+    algorithm: 'SHA-256';
+    hash: string;
+  };
 }
 
-export interface SubmitBatchData {
-  batchId: string;
-  cidManifest: string;
-  evidenceRoot: string;
-  distributionRoot: string;
-  netKg: string;
-  alphaBps: string;
-  attestationUids: string[];
-  oracleReport: OracleReport;
+export interface AuditSummary {
+  blockCount: number | null;
+  merkleRoot: string | null;
+  anchoring: 'local-evidence' | 'not-connected' | 'unknown';
+  lastUpdate: string;
 }
 
-export interface ClaimData {
-  batchId: string;
-  index: string;
-  account: string;
-  amount: string;
-  merkleProof: string[];
+export interface LabSnapshot {
+  mode: RuntimeMode;
+  generatedAt: string;
+  notice: string;
+  services: ServiceHealth[];
+  latestEvent: PhysicalEvent;
+  audit: AuditSummary;
 }
 
-export interface RetireData {
-  amount: string;
-  referencesCID: string;
+export type CapabilityStatus = 'implemented' | 'experimental' | 'roadmap';
+
+export interface Capability {
+  capability: string;
+  status: CapabilityStatus;
+  evidence: string;
 }
 
-export enum ToastType {
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
-  INFO = 'INFO',
-}
-
-export interface ToastMessage {
-  id: number;
-  type: ToastType;
-  message: string;
-}

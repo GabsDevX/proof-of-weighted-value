@@ -1,88 +1,109 @@
-# POWV Protocol — Proof of Weighted Value
+# PoWV Protocol — Public Verification Console
 
-**Enterprise Infrastructure for Cyber-Physical Systems and Real-World Asset (RWA) Tokenization**
+Public reference interface for the physical-to-digital verification model developed in the PoWV Virtual Lab.
 
-The PoWV (Proof of Weighted Value) protocol is a next-generation decentralized architecture engineered to bridge physical operations with digital ledgers through cryptographic proofs, IoT telemetry, and secure blockchain infrastructure.
+This repository contains a **frontend observability console**. It explains and visualizes the current laboratory pipeline without publishing private endpoints, installation coordinates, credentials, device keys or operational evidence.
 
-This repository contains the **PoWV Web Application**, an enterprise-grade interface for hardware endpoint registration, mathematical weight verification, and tokenized asset interaction across the PoWV ecosystem.
+> **Status:** prototype and technical demonstration. This application is not an industrial control system, a token platform, an investment product or proof of publication on a public blockchain.
 
-The protocol enables secure tracking, validation, and monetization of physical asset streams by transforming real-world telemetry into cryptographically auditable on-chain records.
+## What changed
 
----
-
-## What is PoWV?
-
-PoWV operates as a trust-minimized layer for industrial automation, logistics, and high-integrity hardware systems. It connects physical-edge events directly to distributed settlement layers, enabling:
-
-* Verifiable data and physical asset traceability
-* IoT-based telemetry measurement and MRV (Measurement, Reporting, and Verification) workflows
-* Fraud-resistant hardware batch validation
-* Real-World Asset (RWA) tokenization and anchoring
-* Automated smart contract utility and token interactions
-* Immutable auditing for end-to-end infrastructure lifecycles
-
----
-
-## Core Features (Web Interface)
-
-* **Batch Registration:** Visual interface for managing images, hardware metadata, GPS telemetry, weight data, and asset classification.
-* **Automated Verification:** Seamless interaction with the core PoWV engine.
-* **Decentralized Oracle Layer:** Real-time data validation dashboards.
-* **Tokenization Workspace:** Client-side wallet integration, transfer modules, and asset staking tools.
-* **Enterprise UI:** Adaptive dark/light interface built for mission-critical operations.
-
----
-
-## Technology Stack
-
-* **Language:** TypeScript
-* **Frontend Framework:** React (powered by Vite)
-* **Styling:** TailwindCSS
-* **Blockchain Layer:** EVM-compatible networks & Solidity smart contracts
-* **Decentralized Storage:** IPFS integration for immutable metadata
-* **Security:** Cryptographic proof systems & Edge hardware integration layers
-
----
-
-## Project Structure
+The original repository presented token submission, claim and retirement forms backed by randomly generated transaction hashes. That behavior has been removed. The modernized console now represents the system that is actually being tested:
 
 ```text
-your-project/
-├── components/       # UI Components & Dashboard layout
-├── services/         # Web3, Blockchain, and IoT utility APIs
-├── metadata.json     # Mock/Test asset metadata structures
-├── App.tsx           # Main application entry and routing
-├── index.tsx         # React DOM lifecycle entry point
-├── index.html        # HTML5 entry shell
-└── README.md         # Documentation
+physical measurement
+  -> serial host bridge
+  -> normalized event
+  -> compact proof profile
+  -> edge validation
+  -> replay protection
+  -> audit chain / Merkle root
+  -> signed local evidence
+```
 
-Security Contact
+The interface distinguishes three capability states:
 
-Security reports and architectural inquiries should be sent to:
+- **Implemented:** behavior present in the laboratory codebase and covered by its technical flow.
+- **Experimental:** hardware or integration work demonstrated in a controlled environment.
+- **Roadmap:** planned transport, industrialization or tokenization work that is not claimed as complete.
 
-gabriel@powvprotocol.org
+## Public console features
 
-A dedicated enterprise security domain and repository are established under our institutional organization.
+- responsive physical-to-digital architecture view;
+- explicit demo, partial and connected runtime states;
+- service health cards for the physical bridge, edge gateway, audit chain and evidence anchor;
+- sanitized physical-event example with SHA-256 identification;
+- current audit summary and Merkle-root display;
+- capability matrix separating implemented, experimental and roadmap work;
+- optional read-only connection to configured laboratory health endpoints;
+- no fabricated transaction hashes and no private keys in the browser.
 
-Author
+## Run locally
 
-Gabriel de Almeida Santos Silva
+Requirements: Node.js 20 or newer.
 
-Founder & Chief Architect — PoWV Protocol
+```bash
+npm install
+npm run dev
+```
 
-Fields of Expertise:
+Build and type-check:
 
-Protocol Architecture & Blockchain Engineering
+```bash
+npm run check
+npm run build
+```
 
-Applied AI & Data-Driven Automation
+## Runtime modes
 
-Cryptographic Systems & Hardware Integration
+The console starts in **demo mode** when no endpoints are configured. Demo data is deterministic and visibly identified; it must not be interpreted as operational evidence.
 
-High-Integrity Industrial Infrastructure
+For a controlled local environment, create `.env.local`:
 
-Notice
+```dotenv
+VITE_POWV_GATEWAY_URL=http://127.0.0.1:5002
+VITE_POWV_AUDIT_URL=http://127.0.0.1:5003
+```
 
-The PoWV Protocol, including its architecture, methodology, cryptographic mechanisms, and economic models,
-may be protected under applicable intellectual property laws.
+Only public health and audit-summary endpoints should be exposed to the browser. Do not place API tokens, signing keys, passwords, private hostnames or precise installation coordinates in `VITE_*` variables: Vite embeds these values in the client bundle.
 
-Copyright © 2026 Gabriel de Almeida Santos Silva. All rights reserved.
+The connected adapter reads:
+
+- `GET /` from the edge gateway;
+- `GET /` from the audit service;
+- `GET /merkle_root` from the audit service.
+
+Cross-origin access must be deliberately configured on the target services. The console does not bypass browser security controls.
+
+## Relationship to the laboratory
+
+The private laboratory currently explores:
+
+- fixed-size compact binary events;
+- ECDSA P-256 device signatures;
+- device-key registration and lookup;
+- replay protection;
+- SHA-256 event identification;
+- local audit-chain state and Merkle roots;
+- append-only signed evidence;
+- physical scale acquisition through a host bridge and ESP32 HTTP endpoint.
+
+This public repository contains an interface and a safe architectural description, not a copy of operational laboratory data or private infrastructure.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for boundaries, terminology and roadmap.
+
+## Security boundary
+
+- No signing occurs in the browser.
+- No secret is required to run demo mode.
+- No wallet or token transaction is implemented.
+- No exact installation coordinate is included.
+- No HTTP success response is described as cryptographic verification.
+- No local append-only ledger is described as a public blockchain.
+
+Report security concerns through the contact channel published by the project owner. Do not include secrets or sensitive operational evidence in a public issue.
+
+## License and intellectual property
+
+No open-source license has been granted by this repository. Copyright © 2026 Gabriel de Almeida Santos Silva. All rights reserved.
+
