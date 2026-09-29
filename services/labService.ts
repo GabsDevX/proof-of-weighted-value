@@ -2,6 +2,7 @@ import type { LabSnapshot, PhysicalEvent, ServiceHealth } from '../types';
 
 const gatewayUrl = import.meta.env.VITE_POWV_GATEWAY_URL?.trim();
 const auditUrl = import.meta.env.VITE_POWV_AUDIT_URL?.trim();
+const MAX_RESPONSE_BYTES = 64 * 1024;
 
 // Deterministic synthetic fixture. The integrity hash is SHA-256 over the
 // canonical JSON body (sorted keys, compact separators) before "integrity".
@@ -78,12 +79,33 @@ async function fetchJson(url: string, timeoutMs = 3500): Promise<Record<string, 
       throw new Error(`HTTP ${response.status}`);
     }
 
-    const payload: unknown = await response.json();
+    const declaredLength = Number(response.headers.get('content-length'));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_RESPONSE_BYTES) {
+      throw new Error(`Response exceeds ${MAX_RESPONSE_BYTES} bytes`);
+    }
+
+    const body = await response.text();
+    if (new TextEncoder().encode(body).byteLength > MAX_RESPONSE_BYTES) {
+      throw new Error(`Response exceeds ${MAX_RESPONSE_BYTES} bytes`);
+    }
+
+    let payload: unknown;
+    try {
+      payload = JSON.parse(body);
+    } catch {
+      throw new Error('Expected valid JSON');
+    }
+
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
       throw new Error('Expected a JSON object');
     }
 
     return payload as Record<string, unknown>;
+  } catch (error) {
+    if (controller.signal.aborted) {
+      throw new Error(`Request timed out after ${timeoutMs} ms`);
+    }
+    throw error;
   } finally {
     window.clearTimeout(timeout);
   }
