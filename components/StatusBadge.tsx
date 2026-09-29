@@ -5,14 +5,14 @@ type BadgeState = RuntimeMode | ServiceState | 'implemented' | 'experimental' | 
 const labels: Record<BadgeState, string> = {
   connected: 'Connected',
   partial: 'Partial',
-  demo: 'Demo mode',
-  online: 'Online',
+  demo: 'Fixture',
+  online: 'Reachable',
   degraded: 'Degraded',
-  offline: 'Offline',
-  simulated: 'Demonstration',
-  implemented: 'Implemented',
+  offline: 'Unavailable',
+  simulated: 'Fixture',
+  implemented: 'Lab-validated',
   experimental: 'Experimental',
-  roadmap: 'Roadmap',
+  roadmap: 'Planned',
 };
 
 export function StatusBadge({ state }: { state: BadgeState }) {

@@ -1,32 +1,46 @@
-# Security policy
+# Security Policy
 
 ## Supported version
 
-Security fixes are applied to the latest version on the `main` branch. Historical demonstration commits are not maintained as deployable releases.
+Security corrections apply to the current `main` branch. Historical commits are retained for traceability and are not maintained as deployable releases.
 
-## Reporting a vulnerability
+## Security model
 
-Do not open a public issue containing credentials, private endpoints, precise installation coordinates, device keys, raw operational evidence or instructions that would expose a live system.
+The public application is an untrusted browser client. It may consume explicitly exposed read-only status data. It must not perform or receive authority for:
 
-Report security concerns privately to `gabriel@powvprotocol.org` with:
+- event signing;
+- device registration or key rotation;
+- administrative audit operations;
+- unrestricted evidence retrieval;
+- ledger submission;
+- token issuance, transfer or retirement.
 
-- affected file or component;
-- reproduction conditions;
+Cryptographic acceptance and replay decisions belong to the edge gateway. Audit-state integrity belongs to the audit service and evidence layer.
+
+## Deployment requirements
+
+- Treat every `VITE_*` value as public because Vite embeds it in the production bundle.
+- Expose only endpoints designed for unauthenticated read-only access.
+- Apply an explicit origin allowlist; do not use unrestricted CORS for operational services.
+- Terminate TLS before exposing status endpoints outside a loopback or isolated laboratory network.
+- Do not return public keys, raw packets, signatures, precise coordinates or operational identifiers from browser-facing health routes unless the disclosure is intentional and reviewed.
+- Apply request timeouts, response-size limits and schema validation at the public adapter boundary.
+
+## Evidence limitations
+
+The client does not establish physical-source accuracy, cryptographic validity, external-ledger inclusion or industrial certification. A health response confirms endpoint reachability only. A local Merkle root is not a public-chain receipt.
+
+## Vulnerability reporting
+
+Do not create a public issue containing credentials, private endpoints, exact installation coordinates, device keys, raw operational evidence or exploit details affecting a reachable system.
+
+Report security concerns privately to `gabriel@powvprotocol.org` and include:
+
+- affected component and revision;
+- reproduction preconditions;
+- observed and expected behavior;
 - potential impact;
-- suggested mitigation, when available.
+- proposed mitigation, if available.
 
-Do not include working secrets. Revoke or rotate any credential before reporting accidental exposure.
-
-## Public-console boundary
-
-This repository is a public frontend prototype. It must not be trusted to:
-
-- hold signing keys;
-- authorize devices;
-- submit administrative requests;
-- prove a physical measurement independently;
-- issue, transfer or retire tokens;
-- certify publication to a public blockchain.
-
-The browser may read deliberately exposed laboratory health information. All cryptographic acceptance and replay decisions belong to the edge and audit services.
+Revoke or rotate any credential before reporting accidental disclosure. Do not transmit active secrets in the report.
 

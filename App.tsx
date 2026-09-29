@@ -25,7 +25,7 @@ function App() {
     try {
       setSnapshot(await loadLabSnapshot());
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Unable to load the laboratory snapshot.');
+      setError(cause instanceof Error ? cause.message : 'Unable to load the runtime snapshot.');
     } finally {
       setLoading(false);
     }
@@ -42,13 +42,13 @@ function App() {
           <span className="brand__mark">P</span>
           <span>
             <strong>PoWV Protocol</strong>
-            <small>Verification console</small>
+            <small>Verification reference</small>
           </span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#pipeline">Pipeline</a>
-          <a href="#evidence">Evidence</a>
-          <a href="#status">Status</a>
+          <a href="#pipeline">Architecture</a>
+          <a href="#evidence">Event record</a>
+          <a href="#status">System status</a>
         </nav>
       </header>
 
@@ -57,56 +57,60 @@ function App() {
           <div className="hero__content">
             <div className="hero__label">
               <span className="signal-dot" />
-              Public reference interface
+              Experimental reference implementation
             </div>
-            <h1>Physical events.<br /><span>Verifiable digital evidence.</span></h1>
+            <h1>Physical-to-digital<br /><span>verification pipeline.</span></h1>
             <p>
-              A public observability console aligned with the PoWV Virtual Lab model:
-              acquisition, normalization, cryptographic validation, replay protection and auditable evidence.
+              Observability interface for the PoWV laboratory architecture, covering acquisition,
+              canonical event encoding, cryptographic verification, replay control and audit-state reporting.
             </p>
             <div className="hero__actions">
-              <a className="button button--primary" href="#pipeline">Explore the pipeline</a>
-              <a className="button button--ghost" href="#status">Review implementation status</a>
+              <a className="button button--primary" href="#pipeline">View processing stages</a>
+              <a className="button button--ghost" href="#status">View service status</a>
             </div>
           </div>
 
-          <aside className="hero__telemetry" aria-label="Console state">
+          <aside className="hero__telemetry" aria-label="Runtime summary">
             <div className="telemetry__header">
-              <span>Runtime state</span>
+              <span>Runtime profile</span>
               {snapshot && <StatusBadge state={snapshot.mode} />}
             </div>
             <div className="telemetry__metric">
-              <span>Audit blocks</span>
+              <span>Audit record count</span>
               <strong>{snapshot?.audit.blockCount ?? '—'}</strong>
             </div>
             <div className="telemetry__metric">
-              <span>Packet profile</span>
+              <span>Binary profile</span>
               <strong>132 B</strong>
             </div>
             <div className="telemetry__metric">
-              <span>Signature profile</span>
+              <span>Signature scheme</span>
               <strong>ECDSA P-256</strong>
             </div>
             <div className="telemetry__root">
-              <span>Merkle root</span>
-              <code>{snapshot?.audit.merkleRoot ?? 'Not connected'}</code>
+              <span>Reported Merkle root</span>
+              <code>{snapshot?.audit.merkleRoot ?? 'Unavailable'}</code>
             </div>
             <button className="button button--refresh" disabled={loading} onClick={() => void refresh()} type="button">
-              {loading ? 'Refreshing…' : 'Refresh state'}
+              {loading ? 'Refreshing…' : 'Refresh status'}
             </button>
           </aside>
         </section>
 
         {error && <div className="notice notice--error">{error}</div>}
-        {snapshot && <div className="notice"><strong>{snapshot.mode === 'demo' ? 'Demo boundary:' : 'Runtime note:'}</strong> {snapshot.notice}</div>}
+        {snapshot && (
+          <div className="notice">
+            <strong>{snapshot.mode === 'demo' ? 'Fixture profile:' : 'Runtime status:'}</strong> {snapshot.notice}
+          </div>
+        )}
 
         <section className="section" id="status">
           <div className="section__heading">
             <div>
-              <p className="eyebrow">System surface</p>
-              <h2>Laboratory services</h2>
+              <p className="eyebrow">Runtime observability</p>
+              <h2>Service status</h2>
             </div>
-            {snapshot && <span className="updated-at">Updated {shortTimestamp(snapshot.generatedAt)}</span>}
+            {snapshot && <span className="updated-at">Observed {shortTimestamp(snapshot.generatedAt)}</span>}
           </div>
 
           <div className="service-grid">
@@ -127,11 +131,11 @@ function App() {
         <section className="section" id="pipeline">
           <div className="section__heading section__heading--narrow">
             <div>
-              <p className="eyebrow">Reference architecture</p>
-              <h2>From measurement to evidence</h2>
+              <p className="eyebrow">Processing model</p>
+              <h2>Verification stages</h2>
               <p className="section__intro">
-                Each stage has a distinct responsibility. Validation proves structural and cryptographic acceptance;
-                interpretation and tokenization remain separate application layers.
+                The architecture separates acquisition, cryptographic acceptance, audit persistence and downstream
+                business interpretation. Each stage has an explicit control boundary.
               </p>
             </div>
           </div>
@@ -143,16 +147,16 @@ function App() {
             <EventCard event={snapshot.latestEvent} />
 
             <article className="panel contract-card">
-              <p className="eyebrow">Evidence contract</p>
-              <h2>What this interface can prove</h2>
+              <p className="eyebrow">Evidence semantics</p>
+              <h2>Exposed verification state</h2>
               <ul className="check-list">
-                <li><span>01</span> The event structure displayed by the public adapter.</li>
-                <li><span>02</span> Reachability of explicitly configured laboratory services.</li>
-                <li><span>03</span> The documented verification sequence and capability boundary.</li>
+                <li><span>01</span> Normalized event fields and the declared SHA-256 identifier.</li>
+                <li><span>02</span> Reachability state for explicitly configured read-only endpoints.</li>
+                <li><span>03</span> Audit record count and Merkle root reported by the audit service.</li>
               </ul>
               <div className="boundary">
-                <strong>It does not prove</strong>
-                <p>A public-chain transaction, live GNSS position, industrial certification or token issuance.</p>
+                <strong>Excluded assertions</strong>
+                <p>Physical accuracy, live GNSS attestation, public-ledger inclusion, industrial certification and token issuance.</p>
               </div>
             </article>
           </section>
@@ -161,31 +165,31 @@ function App() {
         <section className="section" id="implementation">
           <div className="section__heading section__heading--narrow">
             <div>
-              <p className="eyebrow">Delivery status</p>
-              <h2>Implemented, experimental and next</h2>
+              <p className="eyebrow">Implementation status</p>
+              <h2>Capability maturity</h2>
               <p className="section__intro">
-                The public console distinguishes working laboratory behavior from experimental integration and roadmap work.
+                Status values distinguish laboratory-validated controls, experimental hardware integration and planned transport or settlement work.
               </p>
             </div>
           </div>
           <CapabilityMatrix />
         </section>
 
-        <section className="section principle-grid">
+        <section className="section principle-grid" aria-label="Architecture constraints">
           <article>
             <span>01</span>
-            <h3>Identity before value</h3>
-            <p>Device identity and event authenticity are evaluated before any business interpretation.</p>
+            <h3>Verification authority</h3>
+            <p>Device identity and signature acceptance are evaluated by the edge gateway, not by the browser client.</p>
           </article>
           <article>
             <span>02</span>
-            <h3>Evidence before tokenization</h3>
-            <p>The public application no longer fabricates transaction hashes or implies a deployed token layer.</p>
+            <h3>Replay control</h3>
+            <p>Event uniqueness is enforced per device across committed and concurrent in-flight state.</p>
           </article>
           <article>
             <span>03</span>
-            <h3>Explicit trust boundaries</h3>
-            <p>Demo data, configured endpoints and implemented capabilities remain visibly separated.</p>
+            <h3>Ledger scope</h3>
+            <p>The reported Merkle root represents local audit state unless an independent external anchor receipt is available.</p>
           </article>
         </section>
       </main>
@@ -193,9 +197,9 @@ function App() {
       <footer>
         <div>
           <strong>PoWV Protocol</strong>
-          <p>Public technical interface for physical-to-digital verification research.</p>
+          <p>Reference implementation for physical-to-digital event verification.</p>
         </div>
-        <span>Prototype · Not a production or investment system</span>
+        <span>Experimental software · Not production-qualified</span>
       </footer>
     </div>
   );

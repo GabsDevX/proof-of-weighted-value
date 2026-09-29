@@ -1,7 +1,7 @@
 {
-  "name": "PoWV Verification Console",
-  "description": "Public observability interface for PoWV physical-to-digital verification research.",
-  "mode": "prototype",
+  "name": "PoWV Verification Reference",
+  "description": "Experimental reference client for PoWV physical-to-digital event verification and audit-state observability.",
+  "maturity": "experimental",
   "requestFramePermissions": []
 }
 
