@@ -33,17 +33,16 @@ const stages = [
 
 export function Pipeline() {
   return (
-    <div className="pipeline" aria-label="Physical-to-digital verification stages">
+    <ol className="pipeline" aria-label="Physical-to-digital verification stages">
       {stages.map((stage) => (
-        <article className="pipeline__stage" key={stage.index}>
+        <li className="pipeline__stage" key={stage.index}>
           <span className="pipeline__index">{stage.index}</span>
           <div>
             <h3>{stage.title}</h3>
             <p>{stage.description}</p>
           </div>
-        </article>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 }
-
