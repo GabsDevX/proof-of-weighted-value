@@ -2,6 +2,7 @@
   "name": "PoWV Verification Reference",
   "description": "Experimental reference client for PoWV physical-to-digital event verification and audit-state observability.",
   "maturity": "experimental",
+  "repositoryRole": "read-only-observability-reference",
+  "authoritativeVerifier": false,
   "requestFramePermissions": []
 }
-
