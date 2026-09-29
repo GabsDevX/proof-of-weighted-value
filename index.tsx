@@ -5,8 +5,8 @@ import './styles.css';
 
 const root = document.getElementById('root');
 
-if (!root) {
-  throw new Error('Root element not found.');
+if (!(root instanceof HTMLDivElement)) {
+  throw new Error('Application bootstrap failed: expected a <div id="root"> container.');
 }
 
 ReactDOM.createRoot(root).render(
@@ -14,4 +14,3 @@ ReactDOM.createRoot(root).render(
     <App />
   </React.StrictMode>,
 );
-
