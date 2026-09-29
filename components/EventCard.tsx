@@ -18,7 +18,13 @@ export function EventCard({ event }: { event: PhysicalEvent }) {
           <p className="eyebrow">Normalized event</p>
           <h2>Measurement record</h2>
         </div>
-        <button className="button button--ghost" onClick={() => setShowRaw((value) => !value)} type="button">
+        <button
+          aria-controls="normalized-event-json"
+          aria-expanded={showRaw}
+          className="button button--ghost"
+          onClick={() => setShowRaw((value) => !value)}
+          type="button"
+        >
           {showRaw ? 'Hide JSON' : 'Inspect JSON'}
         </button>
       </div>
@@ -52,8 +58,7 @@ export function EventCard({ event }: { event: PhysicalEvent }) {
         <code>{event.integrity.hash}</code>
       </div>
 
-      {showRaw && <pre className="json-view">{JSON.stringify(event, null, 2)}</pre>}
+      {showRaw && <pre className="json-view" id="normalized-event-json">{JSON.stringify(event, null, 2)}</pre>}
     </article>
   );
 }
-
