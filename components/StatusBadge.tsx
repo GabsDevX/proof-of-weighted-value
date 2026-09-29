@@ -16,6 +16,9 @@ const labels: Record<BadgeState, string> = {
 };
 
 export function StatusBadge({ state }: { state: BadgeState }) {
-  return <span className={`badge badge--${state}`}>{labels[state]}</span>;
+  return (
+    <span className={`badge badge--${state}`} data-state={state}>
+      {labels[state]}
+    </span>
+  );
 }
-
