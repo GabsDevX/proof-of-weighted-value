@@ -2,6 +2,10 @@
 
 The PoWV Verification Reference is a public, read-only client for inspecting the physical-to-digital verification model used in the PoWV laboratory environment. It documents the verification path and exposes sanitized runtime status without embedding device credentials, signing authority, or private operational data.
 
+## Laboratory environment
+
+The PoWV laboratory environment is a controlled integration stack used to exercise the complete lifecycle of a physical measurement: device acquisition, event normalization, canonical encoding, edge verification, replay control, audit ingestion, and evidence inspection. Its purpose is to validate interfaces, trust boundaries, failure behavior, and evidence semantics before an industrial pilot or production deployment.
+
 ## Repository status
 
 | Item | Status |
