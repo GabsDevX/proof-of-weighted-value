@@ -3,9 +3,11 @@ import type { LabSnapshot, PhysicalEvent, ServiceHealth } from '../types';
 const gatewayUrl = import.meta.env.VITE_POWV_GATEWAY_URL?.trim();
 const auditUrl = import.meta.env.VITE_POWV_AUDIT_URL?.trim();
 
+// Deterministic synthetic fixture. The integrity hash is SHA-256 over the
+// canonical JSON body (sorted keys, compact separators) before "integrity".
 const demoEvent: PhysicalEvent = {
   event_type: 'weight_measurement',
-  timestamp: '2026-09-28T22:39:29-03:00',
+  timestamp: '2026-01-01T12:00:00-03:00',
   device: {
     scale: 'Urano US POP',
     interface: 'serial bridge',
@@ -23,7 +25,7 @@ const demoEvent: PhysicalEvent = {
   source: 'demo_fixture',
   integrity: {
     algorithm: 'SHA-256',
-    hash: '4df0678f51a94243fe3781ddf5ac68903a28ca956ae66110f65079280e64382c',
+    hash: '519daa7527a0c75f74bdbbb5b273ad8541941ceb931305e13a7b488c4d14951d',
   },
 };
 
@@ -143,4 +145,3 @@ export async function loadLabSnapshot(): Promise<LabSnapshot> {
     },
   };
 }
-
