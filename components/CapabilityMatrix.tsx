@@ -36,9 +36,9 @@ const capabilities: Capability[] = [
 
 export function CapabilityMatrix() {
   return (
-    <div className="capability-list">
+    <div className="capability-list" role="list" aria-label="Capability maturity assessment">
       {capabilities.map((item) => (
-        <article className="capability" key={item.capability}>
+        <article className="capability" key={item.capability} role="listitem">
           <div>
             <h3>{item.capability}</h3>
             <p>{item.evidence}</p>
@@ -49,4 +49,3 @@ export function CapabilityMatrix() {
     </div>
   );
 }
-
