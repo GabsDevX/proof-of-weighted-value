@@ -1,82 +1,76 @@
-# PoWV Protocol — Verification Reference
+# PoWV Verification Reference
 
-Public reference implementation for the PoWV physical-to-digital verification architecture.
+The PoWV Verification Reference is a public, read-only client for inspecting the physical-to-digital verification model used in the PoWV laboratory environment. It documents the verification path and exposes sanitized runtime status without embedding device credentials, signing authority, or private operational data.
 
-| Attribute | Value |
+## Repository status
+
+| Item | Status |
 | --- | --- |
-| Repository role | Read-only observability client and architecture reference |
+| Purpose | Architecture reference and observability client |
 | Maturity | Experimental; not production-qualified |
-| Runtime | Deterministic fixture or explicitly configured local services |
-| Trust model | The browser is untrusted and holds no signing authority |
+| Event data | Deterministic synthetic fixture unless local services are configured |
+| Verification authority | Edge gateway; never the browser client |
+| Operational backend | Maintained outside this public repository |
 
-This repository documents the externally reviewable system boundary. Operational services, device credentials, private network topology, installation coordinates and production evidence remain outside the public source tree.
+This repository is designed for technical review. It does not represent a production deployment, certification, public-ledger integration, or tokenization system.
 
-## Review map
+## Verification flow
 
-| Review objective | Primary evidence |
-| --- | --- |
-| Establish repository scope and non-claims | This README: **Scope**, **Evidence semantics** and **Implementation status** |
-| Review component boundaries and data flow | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| Review threat assumptions and disclosure controls | [SECURITY.md](SECURITY.md) |
-| Reproduce the public-client validation | `npm ci`, `npm run check`, `npm run build` |
-| Inspect automated validation | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
+1. A physical instrument produces a measurement.
+2. A host bridge parses the device response and normalizes the event.
+3. The PoWV-SBD encoder produces the canonical unsigned byte sequence and fixed-size event packet.
+4. The edge gateway resolves the registered device key, verifies the ECDSA P-256 signature, and applies replay controls.
+5. The audit service records the accepted event identifier and recalculates the Merkle root.
+6. The evidence layer retains material required for subsequent integrity review.
 
-Statements in this repository are limited to the revision under review. Laboratory observations, private services and future roadmap items are not evidence of production deployment.
+Business interpretation, settlement, and tokenization are downstream concerns and are not part of this verification path.
 
-## Scope
+## Component responsibilities
 
-The client exposes a constrained view of the laboratory pipeline:
-
-1. physical measurement acquisition;
-2. serial parsing and event normalization;
-3. canonical binary encoding;
-4. ECDSA P-256 verification at the edge;
-5. replay control by device and event identifier;
-6. audit ingestion and Merkle-root calculation;
-7. evidence-state reporting.
-
-The browser does not sign events, register devices, authorize administrative operations or submit ledger transactions.
-
-## System model
-
-| Stage | Control | Public representation |
+| Component | Responsibility | Authoritative output |
 | --- | --- | --- |
-| Physical source | Produces a measurement through the scale interface. | Deterministic sanitized fixture |
-| Host bridge | Parses serial data and normalizes the event schema. | Architecture and event schema |
-| PoWV-SBD encoder | Produces the canonical unsigned body and fixed-size packet. | Packet profile metadata |
-| Edge gateway | Validates structure, device identity, signature and replay state. | Optional read-only health status |
-| Audit service | Accepts validated event identifiers and calculates the current Merkle root. | Optional read-only audit summary |
-| Evidence layer | Maintains append-only evidence for subsequent review. | Capability status only |
+| Physical source | Produce the source measurement through the instrument interface. | Device response |
+| Host bridge | Parse the response, normalize units, and attach provisioned metadata. | Normalized event |
+| PoWV-SBD encoder | Serialize the canonical fields and device signature. | Fixed-size binary packet |
+| Edge gateway | Validate structure, device identity, signature, and replay state. | Acceptance or rejection result |
+| Audit service | Record accepted event identifiers and calculate the current Merkle root. | Audit record and root |
+| Evidence layer | Retain append-only material for later review. | Reviewable evidence |
+| Public client | Display sanitized fixture data and read-only service status. | Non-authoritative observability view |
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for component boundaries, evidence semantics and non-claims.
+For the complete trust-boundary and data-flow specification, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## Repository layout
+## Implementation status
 
-| Path | Responsibility |
+| Capability | Status | Scope |
+| --- | --- | --- |
+| PoWV-SBD fixed-size packet | Laboratory validated | Operational Virtual Lab |
+| ECDSA P-256 verification | Laboratory validated | Edge gateway |
+| Device-key lookup | Laboratory validated | Device registry and gateway |
+| Retry-safe replay control | Laboratory validated | Edge gateway |
+| Local audit state and Merkle-root calculation | Laboratory validated | Audit service |
+| Urano serial acquisition and ESP32 HTTP delivery | Experimental | Host-mediated hardware path |
+| Public observability client | Implemented | This repository |
+| MQTT/TLS transport profile | Not implemented | Planned work |
+| Industrial RS-485 profile | Not implemented | Planned work |
+| Durable production audit storage | Not implemented | Planned work |
+| External-ledger anchoring | Not implemented | No public anchor receipt is produced |
+| Tokenization contracts | Not implemented | Outside the current verification scope |
+
+“Laboratory validated” refers to controlled testing of the relevant component. It does not imply production readiness, independent certification, or deployment in an industrial facility.
+
+## Runtime modes
+
+The client reports one of three runtime modes:
+
+| Mode | Meaning |
 | --- | --- |
-| `App.tsx` | Application composition and runtime-state presentation |
-| `components/` | Pipeline, event, status and capability views |
-| `services/labService.ts` | Read-only adapter for configured laboratory endpoints |
-| `types.ts` | Public client-side data contracts |
-| `ARCHITECTURE.md` | Reference architecture and trust boundaries |
-| `SECURITY.md` | Threat model and vulnerability-reporting requirements |
-| `.github/workflows/ci.yml` | Type-check and production-build validation |
+| `fixture` | No service endpoint is configured. The interface uses a deterministic synthetic event. |
+| `partial` | At least one configured endpoint is unavailable or returns an invalid response. |
+| `connected` | The configured gateway and audit health endpoints return successful JSON responses. |
 
-## Runtime profiles
+`connected` confirms endpoint reachability only. The current public client does not consume or verify a live signed-event stream.
 
-### Fixture
-
-Used when no endpoint is configured. The event record is deterministic, synthetic and cryptographically self-consistent. It is not operational evidence.
-
-### Partial
-
-Used when one or more configured endpoints fail or remain unavailable. Each service is reported independently.
-
-### Connected
-
-Used when the configured gateway and audit health endpoints return successful JSON responses. Connected status represents endpoint reachability only. The current client does not consume a signed event feed.
-
-## Configuration
+## Run locally
 
 Requirements: Node.js 20 or later.
 
@@ -85,45 +79,63 @@ npm ci
 npm run dev
 ```
 
-For local service integration, create `.env.local`:
+The development server binds to `127.0.0.1:5173` and does not expose itself to the local network by default.
+
+## Connect local laboratory services
+
+Create `.env.local`:
 
 ```dotenv
 VITE_POWV_GATEWAY_URL=http://127.0.0.1:5002
 VITE_POWV_AUDIT_URL=http://127.0.0.1:5003
 ```
 
-The adapter requests:
+The adapter performs read-only requests to:
 
 - `GET /` on the edge gateway;
 - `GET /` on the audit service;
 - `GET /merkle_root` on the audit service.
 
-The target services must implement the required CORS policy. Every `VITE_*` value is embedded in the client bundle and therefore must be treated as public configuration.
+Configured services must provide an explicit CORS policy. All `VITE_*` values are embedded in the browser bundle and must be treated as public configuration; never place credentials or secrets in these variables.
 
-## Verification
+## Validate the repository
 
 ```bash
 npm run check
 npm run build
+npm audit --omit=dev --audit-level=high
 ```
 
-The continuous-integration workflow executes both commands for pull requests and updates to `main`.
+The GitHub Actions workflow runs the same type-check, production build, and production-dependency audit for pull requests and changes to `main`.
 
-## Evidence semantics
+## Evidence interpretation
 
-- A SHA-256 value identifies the canonical event representation; it is not a device signature.
-- A successful HTTP health request establishes service reachability; it does not establish event authenticity.
-- An ECDSA verification result is authoritative only when produced by the edge verifier over the exact unsigned byte sequence.
-- A local Merkle root summarizes the audit service state; it does not establish inclusion in a public blockchain.
-- Location metadata is provisioned unless an authenticated GNSS source and accuracy record are explicitly present.
+| Signal | What it establishes | What it does not establish |
+| --- | --- | --- |
+| Event SHA-256 | Identity of the canonical normalized event | Device authenticity or measurement accuracy |
+| ECDSA P-256 verification | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical source |
+| Replay-control result | The event identifier was not already committed or concurrently reserved | Global uniqueness outside the verifier state |
+| Merkle root | Digest of the audit service's accepted event identifiers | Inclusion in a public blockchain |
+| HTTP `2xx` from the ESP32 | Request acceptance by the ESP32 endpoint | Cryptographic verification or durable persistence |
+| Provisioned location | Installation metadata supplied through configuration | Live or independently attested GNSS position |
 
-## Implementation status
+## Repository structure
 
-Laboratory-validated controls include the PoWV-SBD fixed-size packet, ECDSA P-256 verification, device-key lookup, SHA-256 event identification and retry-safe replay handling. The Urano host bridge and ESP32 delivery path remain experimental. MQTT/TLS, industrial RS-485 profiles, durable production storage, public-ledger anchoring and tokenization remain outside the implemented public scope.
+| Path | Responsibility |
+| --- | --- |
+| `App.tsx` | Application composition and runtime-state presentation |
+| `components/` | Verification stages, event record, service status, and capability views |
+| `services/labService.ts` | Bounded read-only adapter for configured laboratory endpoints |
+| `types.ts` | Immutable public client data contracts |
+| `ARCHITECTURE.md` | Component model, trust boundaries, and evidence semantics |
+| `SECURITY.md` | Security model, deployment requirements, and vulnerability reporting |
+| `.github/workflows/ci.yml` | Automated type-check, build, and dependency-audit validation |
 
-## Security and disclosure
+## Security
 
-The repository must not contain device private keys, administrative tokens, Wi-Fi credentials, private endpoints, exact installation coordinates, raw operational frames or customer identifiers. Review [SECURITY.md](SECURITY.md) before exposing any laboratory endpoint to a browser client.
+The public source tree must not contain device private keys, administrative tokens, Wi-Fi credentials, private endpoints, exact installation coordinates, raw operational frames, customer identifiers, or production evidence.
+
+Review [SECURITY.md](SECURITY.md) before connecting the client to any laboratory service or reporting a vulnerability.
 
 ## License
 
