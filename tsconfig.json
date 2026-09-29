@@ -11,9 +11,9 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "types": ["node"]
   },
   "include": ["**/*.ts", "**/*.tsx", "vite-env.d.ts"]
 }
-
