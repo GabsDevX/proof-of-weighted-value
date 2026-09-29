@@ -3,58 +3,57 @@ export type RuntimeMode = 'demo' | 'connected' | 'partial';
 export type ServiceState = 'online' | 'degraded' | 'offline' | 'simulated';
 
 export interface ServiceHealth {
-  id: string;
-  label: string;
-  description: string;
-  state: ServiceState;
-  detail: string;
+  readonly id: string;
+  readonly label: string;
+  readonly description: string;
+  readonly state: ServiceState;
+  readonly detail: string;
 }
 
 export interface PhysicalEvent {
-  event_type: 'weight_measurement';
-  timestamp: string;
-  device: {
-    scale: string;
-    interface: string;
-    identity: string;
+  readonly event_type: 'weight_measurement';
+  readonly timestamp: string;
+  readonly device: {
+    readonly scale: string;
+    readonly interface: string;
+    readonly identity: string;
   };
-  measurement: {
-    weight_kg: number;
-    tare_kg: number;
+  readonly measurement: {
+    readonly weight_kg: number;
+    readonly tare_kg: number;
   };
-  location: {
-    label: string;
-    disclosure: string;
-    source: string;
+  readonly location: {
+    readonly label: string;
+    readonly disclosure: string;
+    readonly source: string;
   };
-  source: 'physical_scale' | 'demo_fixture';
-  integrity: {
-    algorithm: 'SHA-256';
-    hash: string;
+  readonly source: 'physical_scale' | 'demo_fixture';
+  readonly integrity: {
+    readonly algorithm: 'SHA-256';
+    readonly hash: string;
   };
 }
 
 export interface AuditSummary {
-  blockCount: number | null;
-  merkleRoot: string | null;
-  anchoring: 'local-evidence' | 'not-connected' | 'unknown';
-  lastUpdate: string;
+  readonly blockCount: number | null;
+  readonly merkleRoot: string | null;
+  readonly anchoring: 'local-evidence' | 'not-connected' | 'unknown';
+  readonly lastUpdate: string;
 }
 
 export interface LabSnapshot {
-  mode: RuntimeMode;
-  generatedAt: string;
-  notice: string;
-  services: ServiceHealth[];
-  latestEvent: PhysicalEvent;
-  audit: AuditSummary;
+  readonly mode: RuntimeMode;
+  readonly generatedAt: string;
+  readonly notice: string;
+  readonly services: readonly ServiceHealth[];
+  readonly latestEvent: PhysicalEvent;
+  readonly audit: AuditSummary;
 }
 
 export type CapabilityStatus = 'implemented' | 'experimental' | 'roadmap';
 
 export interface Capability {
-  capability: string;
-  status: CapabilityStatus;
-  evidence: string;
+  readonly capability: string;
+  readonly status: CapabilityStatus;
+  readonly evidence: string;
 }
-
