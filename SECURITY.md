@@ -44,3 +44,13 @@ Report security concerns privately to `gabriel@powvprotocol.org` and include:
 
 Revoke or rotate any credential before reporting accidental disclosure. Do not transmit active secrets in the report.
 
+## Severity and response expectations
+
+| Severity | Example | Initial handling |
+| --- | --- | --- |
+| Critical | Private signing material exposure or unauthorized administrative access | Contain immediately; revoke affected authority before analysis |
+| High | Signature-verification bypass, replay-control bypass or unauthorized evidence disclosure | Disable the affected path and preserve review artifacts |
+| Medium | Schema-validation failure, denial of service or excessive diagnostic disclosure | Reproduce on an isolated revision and prepare a bounded correction |
+| Low | Documentation ambiguity or hardening opportunity without a demonstrated control bypass | Record with the affected revision and remediation rationale |
+
+Acknowledgement and remediation timing depend on reproducibility, affected scope and whether an operational system is exposed. Publication of a correction must identify the affected revision, validation performed and any residual limitation.
