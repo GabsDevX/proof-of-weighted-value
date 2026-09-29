@@ -1,11 +1,12 @@
 {
-  "name": "powv-tracker",
+  "name": "powv-verification-console",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "check": "tsc --noEmit",
+    "build": "npm run check && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -14,7 +15,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
 }
+

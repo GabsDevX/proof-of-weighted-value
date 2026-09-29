@@ -1,5 +1,7 @@
 {
-  "name": "PoWV Tracker",
-  "description": "An application to register electronic waste batches, claim, and retire Proof of Waste Value (PoWV) tokens based on physical evidence and on-chain validation.",
+  "name": "PoWV Verification Console",
+  "description": "Public observability interface for PoWV physical-to-digital verification research.",
+  "mode": "prototype",
   "requestFramePermissions": []
 }
+
