@@ -19,13 +19,13 @@ const demoEvent: PhysicalEvent = {
   },
   location: {
     label: 'Provisioned installation',
-    disclosure: 'Exact coordinates withheld from the public demo',
+    disclosure: 'Exact coordinates withheld',
     source: 'configured_metadata',
   },
   source: 'demo_fixture',
   integrity: {
     algorithm: 'SHA-256',
-    hash: '519daa7527a0c75f74bdbbb5b273ad8541941ceb931305e13a7b488c4d14951d',
+    hash: '63798e589081f9bc2b65e57a336217950f3d3c2c07e46d4e1d492dcdb29b71a1',
   },
 };
 
@@ -43,12 +43,12 @@ function demoSnapshot(): LabSnapshot {
   return {
     mode: 'demo',
     generatedAt: new Date().toISOString(),
-    notice: 'Public demonstration data. No transaction, signature or anchoring claim is produced by this interface.',
+    notice: 'Deterministic synthetic fixture. No operational measurement, signature result or ledger inclusion is represented.',
     services: [
-      service('physical', 'Physical source', 'Scale acquisition and normalization', 'simulated', 'Urano lab fixture'),
-      service('gateway', 'Edge gateway', 'Packet validation and replay protection', 'simulated', 'PoWV-SBD contract'),
-      service('audit', 'Audit chain', 'Event registry and Merkle root', 'simulated', 'Local laboratory model'),
-      service('anchor', 'Evidence anchor', 'Append-only evidence record', 'simulated', 'Local signed evidence'),
+      service('physical', 'Physical source', 'Instrument acquisition and normalization', 'simulated', 'Deterministic Urano-compatible fixture'),
+      service('gateway', 'Edge gateway', 'Structure, signature and replay verification', 'simulated', 'Validation endpoint not queried'),
+      service('audit', 'Audit service', 'Event registry and Merkle-root calculation', 'simulated', 'Audit endpoint not queried'),
+      service('anchor', 'Evidence anchor', 'Append-only evidence retention', 'simulated', 'No external anchor adapter configured'),
     ],
     latestEvent: demoEvent,
     audit: {
@@ -61,7 +61,7 @@ function demoSnapshot(): LabSnapshot {
 }
 
 function normalizeBaseUrl(url: string): string {
-  return url.replace(/\/$/, '');
+  return url.replace(/\/+$/, '');
 }
 
 async function fetchJson(url: string, timeoutMs = 3500): Promise<Record<string, unknown>> {
@@ -78,7 +78,12 @@ async function fetchJson(url: string, timeoutMs = 3500): Promise<Record<string, 
       throw new Error(`HTTP ${response.status}`);
     }
 
-    return await response.json() as Record<string, unknown>;
+    const payload: unknown = await response.json();
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      throw new Error('Expected a JSON object');
+    }
+
+    return payload as Record<string, unknown>;
   } finally {
     window.clearTimeout(timeout);
   }
@@ -117,25 +122,25 @@ export async function loadLabSnapshot(): Promise<LabSnapshot> {
     mode: gatewayOnline && auditOnline ? 'connected' : 'partial',
     generatedAt: new Date().toISOString(),
     notice: gatewayOnline && auditOnline
-      ? 'Connected to configured laboratory endpoints. The browser displays service state; it does not hold signing keys.'
-      : 'Partial connection. Unavailable services are shown explicitly and demonstration data remains visually identified.',
+      ? 'Configured health endpoints returned successful JSON responses. The event record remains a synthetic fixture.'
+      : 'At least one configured endpoint is unavailable. Service state reflects individual request outcomes; the event record remains a synthetic fixture.',
     services: [
-      service('physical', 'Physical source', 'Scale acquisition and normalization', 'simulated', 'Not queried by the public browser'),
+      service('physical', 'Physical source', 'Instrument acquisition and normalization', 'simulated', 'No browser-facing acquisition endpoint configured'),
       service(
         'gateway',
         'Edge gateway',
-        'Packet validation and replay protection',
+        'Structure, signature and replay verification',
         gatewayOnline ? 'online' : gatewayUrl ? 'offline' : 'simulated',
-        gatewayOnline ? 'Health endpoint reachable' : gatewayUrl ? 'Configured endpoint unavailable' : 'Endpoint not configured',
+        gatewayOnline ? 'GET / returned 2xx JSON' : gatewayUrl ? 'Configured request failed' : 'Endpoint not configured',
       ),
       service(
         'audit',
-        'Audit chain',
-        'Event registry and Merkle root',
+        'Audit service',
+        'Event registry and Merkle-root calculation',
         auditOnline ? 'online' : auditUrl ? 'offline' : 'simulated',
-        auditOnline ? 'Health endpoint reachable' : auditUrl ? 'Configured endpoint unavailable' : 'Endpoint not configured',
+        auditOnline ? 'GET / returned 2xx JSON' : auditUrl ? 'Configured request failed' : 'Endpoint not configured',
       ),
-      service('anchor', 'Evidence anchor', 'Append-only evidence record', 'simulated', 'Not exposed by the public adapter'),
+      service('anchor', 'Evidence anchor', 'Append-only evidence retention', 'simulated', 'No public anchor adapter configured'),
     ],
     audit: {
       blockCount,

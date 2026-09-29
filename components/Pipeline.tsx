@@ -1,39 +1,39 @@
 const stages = [
   {
     index: '01',
-    title: 'Physical event',
-    description: 'A scale or sensor produces the measurement at the installation.',
+    title: 'Physical acquisition',
+    description: 'The instrument interface produces the source measurement response.',
   },
   {
     index: '02',
-    title: 'Host bridge',
-    description: 'Serial bytes are parsed and normalized into a structured event.',
+    title: 'Event normalization',
+    description: 'The host bridge parses the serial response and constructs the normalized event.',
   },
   {
     index: '03',
-    title: 'Compact proof',
-    description: 'The PoWV-SBD profile binds identity, event data and integrity material.',
+    title: 'Canonical encoding',
+    description: 'PoWV-SBD serializes the unsigned fields and device signature into a fixed-size packet.',
   },
   {
     index: '04',
-    title: 'Edge validation',
-    description: 'The gateway checks format, signature and replay before acceptance.',
+    title: 'Edge verification',
+    description: 'The gateway validates structure, device identity, signature and replay state.',
   },
   {
     index: '05',
-    title: 'Audit chain',
-    description: 'Accepted event hashes update the local audit state and Merkle root.',
+    title: 'Audit ingestion',
+    description: 'The accepted event identifier is appended and the audit Merkle root is recalculated.',
   },
   {
     index: '06',
-    title: 'Evidence',
-    description: 'A signed append-only record supports later verification and review.',
+    title: 'Evidence output',
+    description: 'Append-only evidence supports subsequent integrity and control review.',
   },
 ];
 
 export function Pipeline() {
   return (
-    <div className="pipeline" aria-label="Physical-to-digital validation pipeline">
+    <div className="pipeline" aria-label="Physical-to-digital verification stages">
       {stages.map((stage) => (
         <article className="pipeline__stage" key={stage.index}>
           <span className="pipeline__index">{stage.index}</span>

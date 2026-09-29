@@ -1,57 +1,112 @@
-# Public architecture and evidence boundary
+# PoWV Public Reference Architecture
 
-## Objective
+## 1. Purpose
 
-The PoWV verification model separates physical observation, cryptographic acceptance, audit storage and later business interpretation. These responsibilities must not be collapsed into a single “blockchain verified” claim.
+This document defines the public component model, trust boundaries and evidence semantics for the PoWV physical-to-digital verification prototype. It is intended for architecture review, security review and integration planning.
 
-## Reference sequence
+The public repository is an observability client. It is not an authoritative verifier and does not contain the operational Virtual Lab services.
 
-| Stage | Responsibility | Public console treatment |
+## 2. Component model
+
+| Component | Responsibility | Authoritative output |
 | --- | --- | --- |
-| Physical event | A sensor or scale produces a measurement. | Sanitized demonstration fixture. |
-| Host bridge | Serial data is parsed and normalized. | Architectural representation only. |
-| Compact proof | Identity, event data and integrity material are serialized. | PoWV-SBD laboratory profile summary. |
-| Edge validation | Format, signature and replay rules are evaluated. | Optional gateway health check. |
-| Audit chain | Accepted event hashes update a Merkle root. | Optional audit summary. |
-| Evidence anchor | A signed append-only record supports later verification. | Status only; evidence files remain private. |
-| Interpretation | Domain rules determine business meaning. | Outside the verification core. |
-| Tokenization | A verified asset may be represented in a settlement layer. | Roadmap; not implemented here. |
+| Physical source | Produce a measurement from the instrument interface. | Raw device response |
+| Host bridge | Parse the response, normalize units and attach configured metadata. | Normalized event |
+| PoWV-SBD encoder | Serialize canonical fields and the device signature into a fixed-size packet. | Binary event packet |
+| Edge gateway | Validate packet structure, obtain the registered public key, verify the signature and enforce replay controls. | Acceptance or rejection result |
+| Audit service | Append accepted event identifiers and calculate the current Merkle root. | Audit record and root |
+| Evidence layer | Preserve append-only review material. | Signed local evidence |
+| Public console | Report sanitized fixture data and read-only service state. | Non-authoritative observability view |
 
-## Trust boundaries
+## 3. Processing sequence
 
-### Browser
+1. The instrument produces a measurement response.
+2. The host bridge parses and normalizes the response.
+3. The encoder constructs the canonical unsigned byte sequence.
+4. The device identity signs the unsigned sequence with ECDSA P-256.
+5. The gateway decodes the packet and verifies the exact received unsigned bytes.
+6. The gateway checks `(device_id, event_id)` against committed and in-flight replay state.
+7. The validated event identifier is forwarded to the audit service.
+8. The audit service appends the record and calculates the updated Merkle root.
+9. Evidence outputs are retained for subsequent verification.
 
-The public browser is untrusted. It may display public state but must never receive device private keys, administrative tokens or signing authority.
+Business interpretation, settlement and tokenization are downstream concerns and are not part of this verification sequence.
 
-### Edge gateway
+## 4. Trust boundaries
 
-The gateway is responsible for validating the exact signed bytes, retrieving the registered public key and enforcing replay rules. A frontend notification is not a substitute for gateway acceptance.
+### 4.1 Browser client
 
-### Audit service
+The browser is untrusted. It must not receive device private keys, administrative credentials, signing authority or unrestricted audit data. Its connected mode is limited to deliberately exposed read-only endpoints.
 
-The laboratory audit service maintains local state and calculates a Merkle root. Its current local evidence model does not prove publication to a public blockchain.
+### 4.2 Host bridge
 
-### Physical integration
+The bridge is responsible for acquisition and normalization. A host-generated SHA-256 identifier provides change detection for the normalized event but does not authenticate the physical source by itself.
 
-The Urano laboratory integration is host-mediated: the computer reads the serial response, normalizes the event, calculates its integrity identifier and forwards it to a configured ESP32 HTTP endpoint. That HTTP receipt does not independently establish signature verification or durable anchoring.
+### 4.3 Edge gateway
 
-## Public release rules
+The gateway is the authoritative cryptographic acceptance boundary. Verification must operate on the exact unsigned bytes received in the packet. Reconstructed data structures are not an equivalent signature input.
 
-The public repository must not contain:
+### 4.4 Device registry
 
-- private or public operational keys;
-- access tokens, Wi-Fi credentials or administrative headers;
+Public keys are resolved by device identity from the audit-side registry. Registration is an administrative operation and must not be exposed through the public client.
+
+### 4.5 Audit service
+
+The current audit chain is a laboratory data structure. Its Merkle root summarizes local state. It does not, without an independently verifiable anchor receipt, prove publication to an external ledger.
+
+### 4.6 Physical integration
+
+The Urano integration is host-mediated. The computer reads the serial response and transmits the normalized event to an ESP32 HTTP endpoint. HTTP acceptance confirms receipt only; it is not equivalent to gateway signature verification or durable audit ingestion.
+
+## 5. Evidence semantics
+
+| Signal | Supported interpretation | Excluded interpretation |
+| --- | --- | --- |
+| Event SHA-256 | Identifier of the canonical normalized event | Device authentication |
+| ECDSA P-256 result | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical measurement |
+| Replay-control result | Event identifier was not previously committed or concurrently reserved | Global uniqueness outside the verifier state |
+| Merkle root | Digest of the audit service's accepted event identifiers | Public-blockchain inclusion |
+| HTTP 2xx from ESP32 | Endpoint received and accepted the request | Cryptographic acceptance or persistence |
+| Provisioned location | Installation metadata supplied by configuration | Live or independently attested GNSS position |
+
+## 6. Runtime profiles
+
+| Profile | Entry condition | Data source |
+| --- | --- | --- |
+| Fixture | No endpoint configured | Deterministic synthetic event and service state |
+| Partial | At least one configured request fails | Per-service request outcomes plus synthetic event fixture |
+| Connected | Gateway and audit health requests succeed | Live health/audit summary plus synthetic event fixture |
+
+The current public client does not expose a live event stream. Connected mode must not be interpreted as end-to-end event verification.
+
+## 7. Public-release constraints
+
+The public source tree must exclude:
+
+- private keys, seed material and signing credentials;
+- administrative tokens and authorization headers;
+- Wi-Fi credentials and private network topology;
 - exact installation coordinates;
-- private network addresses;
-- raw production sensor frames;
-- customer, asset or industrial-pilot identifiers;
-- claims of deployed functionality unsupported by executable code.
+- raw operational sensor frames;
+- customer, asset and industrial-pilot identifiers;
+- unsupported claims of certification, deployment or external-ledger publication.
 
-## Roadmap
+All `VITE_*` configuration values are client-visible and must be treated as public.
 
-1. Define a versioned public event contract shared by the console and gateway adapter.
-2. Add a read-only event stream designed for browser consumption.
-3. Implement authenticated MQTT/TLS and industrial RS-485 transport profiles.
-4. Add durable audit persistence and operational observability.
-5. Evaluate tokenization only after the evidence contract and custody model are stable.
+## 8. Current limitations
+
+- Laboratory audit state is process-local and is not production-durable.
+- Browser access requires an explicit CORS policy on each configured service.
+- The public console reports endpoint reachability but does not validate response signatures.
+- The Urano acquisition path is experimental and host-mediated.
+- MQTT/TLS and RS-485 transport profiles are not implemented in this repository.
+- No public-ledger anchoring receipt or tokenization contract is provided.
+
+## 9. Engineering priorities
+
+1. Define a versioned event and health-contract schema shared across services.
+2. Add authenticated, read-only observability endpoints with explicit CORS policy.
+3. Introduce durable audit persistence and restart-recovery tests.
+4. Specify MQTT/TLS and RS-485 transport profiles, including replay and failure semantics.
+5. Define an independently verifiable anchor receipt before making external-ledger claims.
 

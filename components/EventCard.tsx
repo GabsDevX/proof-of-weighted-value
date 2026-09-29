@@ -15,11 +15,11 @@ export function EventCard({ event }: { event: PhysicalEvent }) {
     <article className="panel event-card">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Latest normalized event</p>
-          <h2>Physical measurement</h2>
+          <p className="eyebrow">Normalized event</p>
+          <h2>Measurement record</h2>
         </div>
         <button className="button button--ghost" onClick={() => setShowRaw((value) => !value)} type="button">
-          {showRaw ? 'Hide JSON' : 'View JSON'}
+          {showRaw ? 'Hide JSON' : 'Inspect JSON'}
         </button>
       </div>
 
@@ -30,25 +30,25 @@ export function EventCard({ event }: { event: PhysicalEvent }) {
 
       <dl className="detail-grid">
         <div>
-          <dt>Source</dt>
+          <dt>Instrument</dt>
           <dd>{event.device.scale}</dd>
         </div>
         <div>
-          <dt>Interface</dt>
+          <dt>Acquisition interface</dt>
           <dd>{event.device.interface}</dd>
         </div>
         <div>
-          <dt>Timestamp</dt>
+          <dt>Event timestamp</dt>
           <dd>{event.timestamp}</dd>
         </div>
         <div>
-          <dt>Location disclosure</dt>
+          <dt>Location policy</dt>
           <dd>{event.location.disclosure}</dd>
         </div>
       </dl>
 
       <div className="hash-block">
-        <span>SHA-256 event identifier</span>
+        <span>Canonical event SHA-256</span>
         <code>{event.integrity.hash}</code>
       </div>
 
