@@ -11,6 +11,18 @@ Public reference implementation for the PoWV physical-to-digital verification ar
 
 This repository documents the externally reviewable system boundary. Operational services, device credentials, private network topology, installation coordinates and production evidence remain outside the public source tree.
 
+## Review map
+
+| Review objective | Primary evidence |
+| --- | --- |
+| Establish repository scope and non-claims | This README: **Scope**, **Evidence semantics** and **Implementation status** |
+| Review component boundaries and data flow | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Review threat assumptions and disclosure controls | [SECURITY.md](SECURITY.md) |
+| Reproduce the public-client validation | `npm ci`, `npm run check`, `npm run build` |
+| Inspect automated validation | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
+
+Statements in this repository are limited to the revision under review. Laboratory observations, private services and future roadmap items are not evidence of production deployment.
+
 ## Scope
 
 The client exposes a constrained view of the laboratory pipeline:
@@ -116,4 +128,3 @@ The repository must not contain device private keys, administrative tokens, Wi-F
 ## License
 
 No open-source license is granted. Copyright © 2026 Gabriel de Almeida Santos Silva. All rights reserved.
-
