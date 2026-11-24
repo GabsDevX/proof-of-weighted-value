@@ -78,11 +78,11 @@ function App() {
             </div>
             <div className="telemetry__metric">
               <span>Binary profile</span>
-              <strong>132 B</strong>
+              <strong>Fixed-size</strong>
             </div>
             <div className="telemetry__metric">
               <span>Signature scheme</span>
-              <strong>ECDSA P-256</strong>
+              <strong>Asymmetric</strong>
             </div>
             <div className="telemetry__root">
               <span>Reported Merkle root</span>

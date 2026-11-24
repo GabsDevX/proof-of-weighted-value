@@ -23,7 +23,7 @@ This repository is designed for technical review. It does not represent a produc
 1. A physical instrument produces a measurement.
 2. A host bridge parses the device response and normalizes the event.
 3. The PoWV-SBD encoder produces the canonical unsigned byte sequence and fixed-size event packet.
-4. The edge gateway resolves the registered device key, verifies the ECDSA P-256 signature, and applies replay controls.
+4. The edge gateway resolves the registered device key, verifies the device signature, and applies replay controls.
 5. The audit service records the accepted event identifier and recalculates the Merkle root.
 6. The evidence layer retains material required for subsequent integrity review.
 
@@ -48,7 +48,7 @@ For the complete trust-boundary and data-flow specification, see [ARCHITECTURE.m
 | Capability | Status | Scope |
 | --- | --- | --- |
 | PoWV-SBD fixed-size packet | Laboratory validated | Operational Virtual Lab |
-| ECDSA P-256 verification | Laboratory validated | Edge gateway |
+| Device signature verification | Laboratory validated | Edge gateway |
 | Device-key lookup | Laboratory validated | Device registry and gateway |
 | Retry-safe replay control | Laboratory validated | Edge gateway |
 | Local audit state and Merkle-root calculation | Laboratory validated | Audit service |
@@ -117,7 +117,7 @@ The GitHub Actions workflow runs the same type-check, production build, and prod
 | Signal | What it establishes | What it does not establish |
 | --- | --- | --- |
 | Event SHA-256 | Identity of the canonical normalized event | Device authenticity or measurement accuracy |
-| ECDSA P-256 verification | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical source |
+| Device signature verification | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical source |
 | Replay-control result | The event identifier was not already committed or concurrently reserved | Global uniqueness outside the verifier state |
 | Merkle root | Digest of the audit service's accepted event identifiers | Inclusion in a public blockchain |
 | HTTP `2xx` from the ESP32 | Request acceptance by the ESP32 endpoint | Cryptographic verification or durable persistence |
