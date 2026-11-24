@@ -23,7 +23,7 @@ The public repository is an observability client. It is not an authoritative ver
 1. The instrument produces a measurement response.
 2. The host bridge parses and normalizes the response.
 3. The encoder constructs the canonical unsigned byte sequence.
-4. The device identity signs the unsigned sequence with ECDSA P-256.
+4. The device identity signs the unsigned sequence with its registered key.
 5. The gateway decodes the packet and verifies the exact received unsigned bytes.
 6. The gateway checks `(device_id, event_id)` against committed and in-flight replay state.
 7. The validated event identifier is forwarded to the audit service.
@@ -63,7 +63,7 @@ The Urano integration is host-mediated. The computer reads the serial response a
 | Signal | Supported interpretation | Excluded interpretation |
 | --- | --- | --- |
 | Event SHA-256 | Identifier of the canonical normalized event | Device authentication |
-| ECDSA P-256 result | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical measurement |
+| Signature verification result | Signature validity for the exact verified bytes and registered public key | Accuracy of the physical measurement |
 | Replay-control result | Event identifier was not previously committed or concurrently reserved | Global uniqueness outside the verifier state |
 | Merkle root | Digest of the audit service's accepted event identifiers | Public-blockchain inclusion |
 | HTTP 2xx from ESP32 | Endpoint received and accepted the request | Cryptographic acceptance or persistence |
@@ -75,7 +75,7 @@ The Urano integration is host-mediated. The computer reads the serial response a
 | --- | --- | --- | --- |
 | `ACQ-01` | Preserve the measurement returned by the instrument interface. | Host bridge | Sanitized event schema only |
 | `ENC-01` | Produce one canonical unsigned byte sequence. | PoWV-SBD encoder | Packet-profile description |
-| `SIG-01` | Verify ECDSA P-256 over the exact received unsigned bytes. | Edge gateway | Laboratory-validated capability status |
+| `SIG-01` | Verify the device signature over the exact received unsigned bytes. | Edge gateway | Laboratory-validated capability status |
 | `RPL-01` | Reject committed or concurrently reserved event identifiers. | Edge gateway | Retry-safe replay-control status |
 | `AUD-01` | Append accepted identifiers and calculate the resulting Merkle root. | Audit service | Read-only audit summary when configured |
 | `PUB-01` | Prevent the public client from acquiring signing or administrative authority. | Deployment boundary | Source inspection and security policy |

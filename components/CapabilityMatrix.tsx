@@ -8,7 +8,7 @@ const capabilities: Capability[] = [
     evidence: 'Fixed-size packet construction with a canonical unsigned byte sequence.',
   },
   {
-    capability: 'ECDSA P-256 verification',
+    capability: 'Device signature verification',
     status: 'implemented',
     evidence: 'Verification is executed over the exact unsigned bytes received by the gateway.',
   },
